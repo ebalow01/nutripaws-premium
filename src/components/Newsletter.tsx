@@ -26,7 +26,7 @@ const Newsletter: React.FC = () => {
   }
 
   return (
-    <section className="newsletter-section">
+    <section id="newsletter" className="newsletter-section">
       <div className="container">
         <div className="newsletter-container">
           <div className="newsletter-content">

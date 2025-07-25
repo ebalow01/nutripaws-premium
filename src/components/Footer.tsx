@@ -41,6 +41,7 @@ const Footer: React.FC = () => {
               <h4>Support</h4>
               <ul>
                 <li><a href="#contact">Contact Us</a></li>
+                <li><a href="#newsletter">Newsletter</a></li>
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#shipping">Shipping Info</a></li>
                 <li><a href="#returns">Returns</a></li>
