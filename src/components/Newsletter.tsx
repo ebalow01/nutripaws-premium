@@ -25,6 +25,8 @@ const Newsletter: React.FC = () => {
     }, 4000)
   }
 
+  console.log('Newsletter component rendering...')
+  
   return (
     <section id="newsletter" className="newsletter-section">
       <div className="container">
