@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import './Newsletter.css'
+import NewsletterPreview from './NewsletterPreview'
 
 const Newsletter: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -92,6 +93,8 @@ const Newsletter: React.FC = () => {
           <p style={{ fontSize: '0.9rem', color: '#666' }}>
             🔒 We respect your privacy. Unsubscribe anytime with one click.
           </p>
+
+          <NewsletterPreview />
         </div>
       </div>
     </section>
