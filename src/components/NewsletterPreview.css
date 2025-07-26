@@ -9,7 +9,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
   z-index: 10000;
   display: flex;
   align-items: flex-start;
@@ -18,122 +19,326 @@
   overflow-y: auto;
 }
 
+/* Email Newsletter Container - Mimics real email client */
 .newsletter-modal {
-  background: white;
-  border-radius: 15px;
-  max-width: 800px;
+  /* Email-style background */
+  background: #f0f0f0;
+  border-radius: 0;
+  max-width: 680px; /* Standard email width */
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: none;
+  overflow: visible;
   position: relative;
-  margin: 2rem 0;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  margin: 2rem auto;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
 }
 
 .newsletter-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: var(--neutral-medium);
-  border: none;
-  width: 40px;
-  height: 40px;
+  position: fixed;
+  top: 2.5rem;
+  right: 2.5rem;
+  background: white;
+  border: 2px solid #ddd;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
+  color: #666;
   transition: all 0.3s ease;
-  z-index: 1;
+  z-index: 10001;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .newsletter-close:hover {
-  background: var(--primary-gold);
+  background: #333;
   color: white;
+  border-color: #333;
+  transform: rotate(90deg);
 }
 
+/* Modern Email Structure */
 .newsletter-content-wrapper {
-  padding: 3rem;
+  background: white;
   line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #333;
+  overflow: hidden;
+  padding: 0;
 }
 
+/* Email Preheader Text (hidden but important for email clients) */
+.newsletter-preheader {
+  display: none;
+  font-size: 1px;
+  color: transparent;
+  line-height: 1px;
+  max-height: 0;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Professional Email Header with Logo Band */
 .newsletter-header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  padding: 2rem 0;
   text-align: center;
-  margin-bottom: 3rem;
-  border-bottom: 2px solid var(--neutral-medium);
-  padding-bottom: 2rem;
+  margin: 0;
+  border-bottom: 5px solid var(--primary-gold);
+  position: relative;
+  overflow: hidden;
 }
 
+.newsletter-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.newsletter-header::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  left: -10%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* Professional Logo Section */
 .newsletter-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 2rem;
+  background: white;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .newsletter-logo .logo-icon {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--primary-gold);
+  filter: drop-shadow(0 2px 4px rgba(212, 175, 55, 0.3));
 }
 
 .newsletter-logo .logo-text {
   font-family: 'Georgia', serif;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
 }
 
 .newsletter-header h1 {
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-  font-size: 2.5rem;
+  color: white;
+  margin: 1.5rem 0 0.75rem;
+  font-size: 2.25rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .newsletter-subtitle {
-  color: var(--text-secondary);
-  font-style: italic;
-  font-size: 1.2rem;
+  color: var(--primary-gold);
+  font-style: normal;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin: 0 auto;
+  max-width: 500px;
 }
 
+/* Hero Image Section */
+.newsletter-hero {
+  background: linear-gradient(135deg, var(--primary-gold) 0%, #e8c547 100%);
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletter-hero::before {
+  content: '🐕 🐈 🦜 🐇';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  opacity: 0.1;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.newsletter-hero h2 {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter-hero p {
+  color: white;
+  font-size: 1.25rem;
+  margin: 0 auto;
+  max-width: 500px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Modern Email Body Container */
 .newsletter-body {
-  color: var(--text-primary);
+  background: #f8f9fa;
+  padding: 2rem 0;
+  color: #333;
 }
 
+/* Content Container for proper email spacing */
+.newsletter-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Modern Card-Based Sections */
 .newsletter-section {
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--neutral-medium);
+  background: white;
+  margin: 0 2rem 2rem;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e5e5;
+  position: relative;
+  overflow: hidden;
 }
 
 .newsletter-section:last-child {
-  border-bottom: none;
+  margin-bottom: 0;
 }
 
+/* Section with accent border */
+.newsletter-section.accent-gold {
+  border-top: 4px solid var(--primary-gold);
+}
+
+.newsletter-section.accent-green {
+  border-top: 4px solid var(--accent-green);
+}
+
+.newsletter-section.accent-brown {
+  border-top: 4px solid var(--secondary-brown);
+}
+
+/* Modern Section Headers */
 .newsletter-section h2 {
-  color: var(--primary-gold);
-  margin-bottom: 1.5rem;
-  font-size: 1.8rem;
-  border-left: 4px solid var(--primary-gold);
-  padding-left: 1rem;
+  color: #1a1a1a;
+  margin-bottom: 1.75rem;
+  font-size: 1.75rem;
+  padding: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.newsletter-section h2::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary-gold), transparent);
+}
+
+/* Icon badges for sections */
+.section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary-gold), #e8c547);
+  border-radius: 12px;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
 }
 
 .newsletter-section h3 {
-  color: var(--text-primary);
+  color: #2c3e50;
   margin-bottom: 1rem;
+  font-size: 1.35rem;
+  font-weight: 600;
 }
 
 .newsletter-section h4 {
-  color: var(--text-primary);
+  color: #2c3e50;
   margin-bottom: 0.75rem;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  font-weight: 600;
 }
 
 .newsletter-section p {
   margin-bottom: 1rem;
-  color: var(--text-secondary);
+  color: #5a6c7d;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* Email-style divider */
+.email-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+  margin: 2rem 0;
+}
+
+/* Call-to-action buttons */
+.newsletter-cta {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, var(--primary-gold), #e8c547);
+  color: white;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+  transition: all 0.3s ease;
+  margin: 1rem 0;
+}
+
+.newsletter-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(212, 175, 55, 0.5);
+}
+
+.newsletter-cta.secondary {
+  background: white;
+  color: var(--primary-gold);
+  border: 2px solid var(--primary-gold);
+  box-shadow: none;
+}
+
+.newsletter-cta.secondary:hover {
+  background: var(--primary-gold);
+  color: white;
 }
 
 .newsletter-section ul,
@@ -147,12 +352,42 @@
   color: var(--text-secondary);
 }
 
-/* Featured Product Styling */
+/* Featured Product Card - Premium Style */
 .featured-product .product-highlight {
-  background: linear-gradient(135deg, var(--neutral-light), white);
-  padding: 2rem;
-  border-radius: 15px;
-  border-left: 4px solid var(--primary-gold);
+  background: linear-gradient(135deg, #fdfbf7 0%, #fff 100%);
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 2px solid var(--primary-gold);
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-product .product-highlight::before {
+  content: '⭐ FEATURED';
+  position: absolute;
+  top: 1rem;
+  right: -2rem;
+  background: var(--primary-gold);
+  color: white;
+  padding: 0.5rem 3rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Product Image Placeholder */
+.product-image {
+  width: 100%;
+  height: 250px;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  color: #ccc;
 }
 
 .product-features,
@@ -165,13 +400,31 @@
   font-size: 1.1rem;
 }
 
-/* Q&A Styling */
+/* Modern Q&A Cards */
 .qa-item {
-  background: var(--neutral-light);
-  padding: 1.5rem;
-  border-radius: 10px;
+  background: #f8fdf8;
+  padding: 2rem;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
-  border-left: 3px solid var(--accent-green);
+  border: 1px solid #e8f5e8;
+  position: relative;
+  padding-left: 3.5rem;
+}
+
+.qa-item::before {
+  content: '💬';
+  position: absolute;
+  left: 1rem;
+  top: 2rem;
+  font-size: 1.5rem;
+  background: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .qa-item h4 {
@@ -184,12 +437,41 @@
   color: var(--accent-green);
 }
 
-/* Success Story Styling */
+/* Success Story - Testimonial Style */
 .success-story .story-highlight {
-  background: linear-gradient(135deg, rgba(52, 199, 89, 0.1), rgba(52, 199, 89, 0.05));
-  padding: 2rem;
-  border-radius: 15px;
-  border: 1px solid rgba(52, 199, 89, 0.2);
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  border: 2px solid #e8f5e8;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(52, 199, 89, 0.1);
+}
+
+.success-story .story-highlight::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 2rem;
+  font-size: 4rem;
+  color: var(--accent-green);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+/* Customer Avatar */
+.customer-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent-green), #34c759);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
 }
 
 .before-after {
@@ -237,12 +519,36 @@
   padding: 0.25rem 0;
 }
 
-/* Recipe Styling */
+/* Recipe Card - Pinterest Style */
 .recipe .recipe-card {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(232, 197, 71, 0.05));
+  background: white;
+  padding: 0;
+  border-radius: 16px;
+  border: 1px solid #e5e5e5;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.recipe-header {
+  background: linear-gradient(135deg, var(--primary-gold), #e8c547);
   padding: 2rem;
-  border-radius: 15px;
-  border: 1px solid rgba(212, 175, 55, 0.2);
+  color: white;
+  text-align: center;
+}
+
+.recipe-header h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.recipe-header p {
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0.5rem 0 0;
+}
+
+.recipe-body {
+  padding: 2rem;
 }
 
 .recipe-content {
@@ -281,13 +587,91 @@
   border: 1px solid rgba(52, 199, 89, 0.2);
 }
 
-/* Offers Styling */
+/* Special Offers - Coupon Style */
 .offers .offer-category {
-  background: linear-gradient(135deg, var(--primary-gold-light), var(--primary-gold));
-  color: white;
-  padding: 1.5rem;
-  border-radius: 10px;
+  background: white;
+  border: 2px dashed var(--primary-gold);
+  padding: 2rem;
+  border-radius: 12px;
   margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.offers .offer-category::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  box-shadow: 20px 0 0 #f8f9fa, 40px 0 0 #f8f9fa, 60px 0 0 #f8f9fa,
+              80px 0 0 #f8f9fa, 100px 0 0 #f8f9fa, 120px 0 0 #f8f9fa,
+              140px 0 0 #f8f9fa, 160px 0 0 #f8f9fa, 180px 0 0 #f8f9fa,
+              200px 0 0 #f8f9fa, 220px 0 0 #f8f9fa, 240px 0 0 #f8f9fa,
+              260px 0 0 #f8f9fa, 280px 0 0 #f8f9fa, 300px 0 0 #f8f9fa,
+              320px 0 0 #f8f9fa, 340px 0 0 #f8f9fa, 360px 0 0 #f8f9fa,
+              380px 0 0 #f8f9fa, 400px 0 0 #f8f9fa, 420px 0 0 #f8f9fa,
+              440px 0 0 #f8f9fa, 460px 0 0 #f8f9fa, 480px 0 0 #f8f9fa,
+              500px 0 0 #f8f9fa, 520px 0 0 #f8f9fa, 540px 0 0 #f8f9fa,
+              560px 0 0 #f8f9fa, 580px 0 0 #f8f9fa, 600px 0 0 #f8f9fa,
+              620px 0 0 #f8f9fa, 640px 0 0 #f8f9fa, 660px 0 0 #f8f9fa;
+}
+
+.offers .offer-category::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  width: 40px;
+  height: 40px;
+  background: #f8f9fa;
+  border-radius: 50%;
+  box-shadow: 20px 0 0 #f8f9fa, 40px 0 0 #f8f9fa, 60px 0 0 #f8f9fa,
+              80px 0 0 #f8f9fa, 100px 0 0 #f8f9fa, 120px 0 0 #f8f9fa,
+              140px 0 0 #f8f9fa, 160px 0 0 #f8f9fa, 180px 0 0 #f8f9fa,
+              200px 0 0 #f8f9fa, 220px 0 0 #f8f9fa, 240px 0 0 #f8f9fa,
+              260px 0 0 #f8f9fa, 280px 0 0 #f8f9fa, 300px 0 0 #f8f9fa,
+              320px 0 0 #f8f9fa, 340px 0 0 #f8f9fa, 360px 0 0 #f8f9fa,
+              380px 0 0 #f8f9fa, 400px 0 0 #f8f9fa, 420px 0 0 #f8f9fa,
+              440px 0 0 #f8f9fa, 460px 0 0 #f8f9fa, 480px 0 0 #f8f9fa,
+              500px 0 0 #f8f9fa, 520px 0 0 #f8f9fa, 540px 0 0 #f8f9fa,
+              560px 0 0 #f8f9fa, 580px 0 0 #f8f9fa, 600px 0 0 #f8f9fa,
+              620px 0 0 #f8f9fa, 640px 0 0 #f8f9fa, 660px 0 0 #f8f9fa;
+}
+
+.offers .offer-category h3 {
+  color: var(--primary-gold);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.offers .offer-category li {
+  color: #5a6c7d;
+  position: relative;
+  z-index: 1;
+}
+
+.offers .offer-category strong {
+  color: var(--primary-gold);
+  font-size: 1.15rem;
+}
+
+/* Promo Code Box */
+.promo-code {
+  background: var(--primary-gold);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-top: 1rem;
+  font-family: monospace;
 }
 
 .offers .offer-category h3 {
@@ -317,38 +701,134 @@
   border-left: 3px solid var(--primary-gold);
 }
 
-/* Footer Styling */
+/* Professional Email Footer */
 .newsletter-footer {
+  background: #1a1a1a;
+  color: white;
   text-align: center;
-  padding: 2rem;
-  background: var(--neutral-light);
-  border-radius: 0 0 15px 15px;
-  margin: 2rem -3rem -3rem -3rem;
+  padding: 3rem 2rem;
+  margin: 0;
+}
+
+.newsletter-footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Social Media Links */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-link {
+  width: 45px;
+  height: 45px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background: var(--primary-gold);
+  color: white;
+  transform: translateY(-3px);
+}
+
+/* Footer Links */
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--primary-gold);
 }
 
 .newsletter-footer p {
   margin-bottom: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
+  color: #999;
+  font-size: 0.85rem;
+  line-height: 1.6;
 }
 
-/* Mobile Responsive */
+.newsletter-footer .copyright {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #333;
+  color: #666;
+}
+
+/* Unsubscribe Link */
+.unsubscribe {
+  color: #666;
+  font-size: 0.8rem;
+  text-decoration: underline;
+}
+
+.unsubscribe:hover {
+  color: #999;
+}
+
+/* Mobile Responsive - Email First */
 @media (max-width: 768px) {
   .newsletter-modal {
     margin: 1rem 0;
-    border-radius: 10px;
+    width: 100%;
+    max-width: 100%;
   }
 
-  .newsletter-content-wrapper {
-    padding: 2rem;
+  .newsletter-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .newsletter-logo {
+    padding: 0.5rem 1.5rem;
+  }
+
+  .newsletter-logo .logo-text {
+    font-size: 1.5rem;
   }
 
   .newsletter-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .newsletter-hero h2 {
     font-size: 2rem;
+  }
+
+  .newsletter-section {
+    margin: 0 1rem 1.5rem;
+    padding: 2rem 1.5rem;
   }
 
   .newsletter-section h2 {
     font-size: 1.5rem;
+  }
+
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
   }
 
   .recipe-content {
@@ -360,29 +840,214 @@
     grid-template-columns: 1fr;
   }
 
-  .newsletter-footer {
-    margin: 2rem -2rem -2rem -2rem;
+  .footer-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .newsletter-cta {
+    display: block;
+    text-align: center;
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .newsletter-modal-overlay {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 
-  .newsletter-content-wrapper {
-    padding: 1.5rem;
+  .newsletter-close {
+    top: 1rem;
+    right: 1rem;
+    width: 35px;
+    height: 35px;
+    font-size: 1.5rem;
   }
 
   .newsletter-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .newsletter-hero h2 {
     font-size: 1.75rem;
   }
 
-  .newsletter-section h2 {
-    font-size: 1.3rem;
+  .newsletter-section {
+    margin: 0 0.5rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
-  .newsletter-footer {
-    margin: 1.5rem -1.5rem -1.5rem -1.5rem;
+  .newsletter-section h2 {
+    font-size: 1.25rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .newsletter-section h2::after {
+    display: none;
+  }
+
+  .section-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+    margin: 0 auto;
+  }
+
+  .social-links {
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .newsletter-cta {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    margin: 0.5rem 0.25rem;
+  }
+
+  .promo-code {
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+/* Email Animation Effects */
+@keyframes slideInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.newsletter-section {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+.newsletter-header {
+  animation: slideInFromTop 0.8s ease-out;
+}
+
+/* Loading shimmer effect for product images */
+.product-image:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* Hover effects for interactive elements */
+.newsletter-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.12);
+}
+
+.qa-item:hover::before {
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Email client compatibility fixes */
+.newsletter-content-wrapper table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.newsletter-content-wrapper td {
+  padding: 0;
+  margin: 0;
+}
+
+/* Dark mode support for modern email clients */
+@media (prefers-color-scheme: dark) {
+  .newsletter-modal {
+    background: #2d2d2d;
+  }
+  
+  .newsletter-section {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #e0e0e0;
+  }
+  
+  .newsletter-section h2,
+  .newsletter-section h3,
+  .newsletter-section h4 {
+    color: #fff;
+  }
+  
+  .newsletter-section p {
+    color: #ccc;
+  }
+}
+
+/* Print styles for email compatibility */
+@media print {
+  .newsletter-modal-overlay {
+    background: white;
+    position: static;
+  }
+
+  .newsletter-close {
+    display: none;
+  }
+
+  .newsletter-modal {
+    box-shadow: none;
+    max-width: none;
+  }
+  
+  .newsletter-section {
+    page-break-inside: avoid;
   }
 }
