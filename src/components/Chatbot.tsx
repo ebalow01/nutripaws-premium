@@ -10,6 +10,8 @@ interface Message {
 
 const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
+  
+  console.log('Chatbot component rendered, isOpen:', isOpen)
   const [messages, setMessages] = useState<Message[]>([])
   const [inputText, setInputText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -174,10 +176,27 @@ const Chatbot: React.FC = () => {
 
   return (
     <>
+      {/* Debug indicator */}
+      <div style={{
+        position: 'fixed',
+        top: '10px',
+        left: '10px',
+        background: 'red',
+        color: 'white',
+        padding: '5px',
+        fontSize: '12px',
+        zIndex: 10000
+      }}>
+        Chatbot Loaded: {isOpen ? 'OPEN' : 'CLOSED'}
+      </div>
+      
       {/* Chatbot Toggle Button */}
       <button
         className={`chatbot-toggle ${isOpen ? 'open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          console.log('Button clicked! Current state:', isOpen)
+          setIsOpen(!isOpen)
+        }}
         aria-label="Open AI chat assistant"
       >
         {isOpen ? '✕' : '🤖'}
