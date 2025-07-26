@@ -13,6 +13,22 @@ import Chatbot from './components/Chatbot'
 function App() {
   return (
     <div className="App">
+      {/* Debug indicator - should show immediately if React loads */}
+      <div style={{
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        background: 'purple',
+        color: 'white',
+        padding: '10px',
+        fontSize: '16px',
+        zIndex: 999999,
+        width: '100%',
+        textAlign: 'center'
+      }}>
+        🟣 REACT IS WORKING - {new Date().toLocaleTimeString()}
+      </div>
+      
       <Header />
       <Hero />
       <About />
