@@ -33,19 +33,19 @@ exports.handler = async (event, context) => {
       }
     }
 
-    // Call OpenAI API
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Call Anthropic Claude API
+    const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
         'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: chatContext || `You are NutriBot, an AI assistant for NutriPaws Premium pet food company. You are an expert in pet nutrition, feeding advice, and our premium pet food products. 
+        model: 'claude-3-haiku-20240307',
+        max_tokens: 200,
+        temperature: 0.7,
+        system: chatContext || `You are NutriBot, an AI assistant for NutriPaws Premium pet food company. You are an expert in pet nutrition, feeding advice, and our premium pet food products. 
 
 Our Products:
 - NutriPaws Premium formulas start at $89.99
@@ -61,21 +61,19 @@ Key Info:
 - 100% satisfaction guarantee, 30-day return policy
 - Scientific Advisory Board: Dr. Marina Rodriguez, DVM, PhD
 
-Provide helpful, accurate advice about pet nutrition, feeding, and our products. Keep responses conversational and under 150 words.`
-          },
+Provide helpful, accurate advice about pet nutrition, feeding, and our products. Keep responses conversational and under 150 words.`,
+        messages: [
           {
             role: 'user',
             content: message
           }
-        ],
-        max_tokens: 200,
-        temperature: 0.7,
+        ]
       }),
     })
 
-    if (!openaiResponse.ok) {
-      const errorData = await openaiResponse.json()
-      console.error('OpenAI API Error:', errorData)
+    if (!claudeResponse.ok) {
+      const errorData = await claudeResponse.json()
+      console.error('Claude API Error:', errorData)
       
       // Return fallback response instead of error
       return {
@@ -88,8 +86,8 @@ Provide helpful, accurate advice about pet nutrition, feeding, and our products.
       }
     }
 
-    const data = await openaiResponse.json()
-    const aiResponse = data.choices[0]?.message?.content || "I'd be happy to help! Could you tell me more about your pet's specific needs?"
+    const data = await claudeResponse.json()
+    const aiResponse = data.content[0]?.text || "I'd be happy to help! Could you tell me more about your pet's specific needs?"
 
     return {
       statusCode: 200,
@@ -113,7 +111,7 @@ Provide helpful, accurate advice about pet nutrition, feeding, and our products.
   }
 }
 
-// Fallback responses when OpenAI API is unavailable
+// Fallback responses when Claude API is unavailable
 function getFallbackResponse(message) {
   const msg = message.toLowerCase()
   
