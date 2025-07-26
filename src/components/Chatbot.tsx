@@ -190,18 +190,68 @@ const Chatbot: React.FC = () => {
         Chatbot Loaded: {isOpen ? 'OPEN' : 'CLOSED'}
       </div>
       
-      {/* Chatbot Toggle Button */}
-      <button
-        className={`chatbot-toggle ${isOpen ? 'open' : ''}`}
-        onClick={() => {
-          console.log('Button clicked! Current state:', isOpen)
+      {/* Alternative div-based button for testing */}
+      <div
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            console.log('Keyboard activation detected')
+            setIsOpen(!isOpen)
+          }
+        }}
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          console.log('DIV clicked! Current state:', isOpen)
           setIsOpen(!isOpen)
         }}
+        onMouseDown={() => {
+          console.log('DIV mouse down detected')
+        }}
+        onMouseEnter={() => {
+          console.log('DIV hover detected - element is receiving mouse events')
+        }}
         aria-label="Open AI chat assistant"
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          width: '60px',
+          height: '60px',
+          background: 'linear-gradient(135deg, #d4af37, #e8c547)',
+          border: 'none',
+          borderRadius: '50%',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1.5rem',
+          color: 'white',
+          boxShadow: '0 4px 20px rgba(212, 175, 55, 0.4)',
+          transition: 'all 0.3s ease',
+          zIndex: 99999,
+          userSelect: 'none'
+        }}
       >
         {isOpen ? '✕' : '🤖'}
-        {!isOpen && <span className="chatbot-badge">AI Assistant</span>}
-      </button>
+        {!isOpen && <span style={{
+          position: 'absolute',
+          bottom: '-8px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'white',
+          color: '#d4af37',
+          padding: '4px 8px',
+          borderRadius: '12px',
+          fontSize: '0.7rem',
+          fontWeight: 'bold',
+          whiteSpace: 'nowrap',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+          pointerEvents: 'none'
+        }}>AI Assistant</span>}
+      </div>
+
 
       {/* Chatbot Window */}
       {isOpen && (
