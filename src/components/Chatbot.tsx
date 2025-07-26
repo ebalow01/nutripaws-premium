@@ -23,53 +23,127 @@ const Chatbot: React.FC = () => {
     }
   }
   
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const input = document.getElementById('chat-input') as HTMLInputElement
     const messages = document.getElementById('chat-messages')
     
     if (!input?.value.trim() || !messages) return
     
-    // Add user message
-    const userMsg = document.createElement('div')
-    userMsg.style.cssText = 'background: #d4af37; color: white; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; align-self: flex-end; text-align: right;'
-    userMsg.textContent = input.value
-    messages.appendChild(userMsg)
-    
-    // Generate bot response
-    const botResponse = generateResponse(input.value)
+    const userMessage = input.value
     input.value = ''
     
-    setTimeout(() => {
+    // Add user message
+    const userMsg = document.createElement('div')
+    userMsg.style.cssText = 'background: #d4af37; color: white; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; align-self: flex-end; text-align: right; margin-left: auto;'
+    userMsg.textContent = userMessage
+    messages.appendChild(userMsg)
+    messages.scrollTop = messages.scrollHeight
+    
+    // Add typing indicator
+    const typingMsg = document.createElement('div')
+    typingMsg.style.cssText = 'background: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d4af37;'
+    typingMsg.innerHTML = '🤖 <em>Thinking...</em>'
+    typingMsg.id = 'typing-indicator'
+    messages.appendChild(typingMsg)
+    messages.scrollTop = messages.scrollHeight
+    
+    try {
+      // Get AI response
+      const botResponse = await generateResponse(userMessage)
+      
+      // Remove typing indicator
+      const typingIndicator = document.getElementById('typing-indicator')
+      if (typingIndicator) {
+        typingIndicator.remove()
+      }
+      
+      // Add bot response
       const botMsg = document.createElement('div')
-      botMsg.style.cssText = 'background: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d4af37;'
+      botMsg.style.cssText = 'background: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d4af37; animation: fadeIn 0.3s ease;'
       botMsg.textContent = `🤖 ${botResponse}`
       messages.appendChild(botMsg)
+      
+      // Smooth scroll to bottom
+      setTimeout(() => {
+        messages.scrollTo({
+          top: messages.scrollHeight,
+          behavior: 'smooth'
+        })
+      }, 100)
+      
+    } catch (error) {
+      console.error('Error sending message:', error)
+      
+      // Remove typing indicator
+      const typingIndicator = document.getElementById('typing-indicator')
+      if (typingIndicator) {
+        typingIndicator.remove()
+      }
+      
+      // Show error message
+      const errorMsg = document.createElement('div')
+      errorMsg.style.cssText = 'background: #ffe6e6; color: #d33; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d33;'
+      errorMsg.textContent = '🤖 Sorry, I\'m having trouble right now. Please try again or contact 1-800-NUTRIPAWS!'
+      messages.appendChild(errorMsg)
       messages.scrollTop = messages.scrollHeight
-    }, 500)
-    
-    messages.scrollTop = messages.scrollHeight
+    }
   }
   
-  const generateResponse = (message: string): string => {
-    const msg = message.toLowerCase()
-    
-    if (msg.includes('price') || msg.includes('cost')) {
-      return "Our NutriPaws Premium starts at $89.99. We offer multi-pet discounts and subscription savings up to 25% off!"
+  const generateResponse = async (message: string): Promise<string> => {
+    try {
+      // Call OpenAI API with pet nutrition context
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message,
+          context: `You are NutriBot, an AI assistant for NutriPaws Premium pet food company. You are an expert in pet nutrition, feeding advice, and our premium pet food products. 
+
+Our Products:
+- NutriPaws Premium formulas start at $89.99
+- Summer Hydration Plus Formula for hot weather ($89.99, reg $94.99)
+- Performance Packs for working dogs 
+- Stress-support formulas with L-tryptophan and magnesium
+- Multi-pet discounts and subscription savings up to 25% off
+- All veterinary-formulated with no artificial preservatives
+
+Key Info:
+- Contact: 1-800-NUTRIPAWS or experts@nutripaws.com
+- Free shipping on orders over $50
+- 100% satisfaction guarantee, 30-day return policy
+- Scientific Advisory Board: Dr. Marina Rodriguez, DVM, PhD
+
+Provide helpful, accurate advice about pet nutrition, feeding, and our products. Keep responses conversational and under 150 words.`
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('API request failed')
+      }
+
+      const data = await response.json()
+      return data.response || "I'd be happy to help! Could you tell me more about your pet's specific needs?"
+      
+    } catch (error) {
+      console.error('AI API Error:', error)
+      
+      // Fallback responses if API fails
+      const msg = message.toLowerCase()
+      
+      if (msg.includes('price') || msg.includes('cost')) {
+        return "Our NutriPaws Premium starts at $89.99. We offer multi-pet discounts and subscription savings up to 25% off!"
+      }
+      if (msg.includes('cat') || msg.includes('feline')) {
+        return "For cats, I recommend multiple water stations and our stress-support formula. What specific cat question can I help with?"
+      }
+      if (msg.includes('dog') || msg.includes('canine')) {
+        return "Working dogs need high-quality protein and proper hydration. Our Performance Packs are perfect for active dogs!"
+      }
+      
+      return "I'm having trouble connecting to my AI brain right now, but our nutrition experts at 1-800-NUTRIPAWS are standing by to help with your pet's specific needs!"
     }
-    if (msg.includes('cat') || msg.includes('feline')) {
-      return "For cats, I recommend multiple water stations and our stress-support formula. What specific cat question can I help with?"
-    }
-    if (msg.includes('dog') || msg.includes('canine')) {
-      return "Working dogs need high-quality protein and proper hydration. Our Performance Packs are perfect for active dogs!"
-    }
-    if (msg.includes('ingredients')) {
-      return "Our premium formulas feature high-quality proteins, essential vitamins, and no artificial preservatives. Which formula interests you?"
-    }
-    if (msg.includes('hello') || msg.includes('hi')) {
-      return "Hello! I'm here to help with pet nutrition questions. What can I assist you with today?"
-    }
-    
-    return "That's a great question! Our nutrition experts at 1-800-NUTRIPAWS can provide detailed guidance for your pet's specific needs."
   }
   
   return (
