@@ -12,6 +12,24 @@ const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   
   console.log('Chatbot component rendered, isOpen:', isOpen)
+  
+  // Global error tracking
+  useEffect(() => {
+    const handleError = (error: ErrorEvent) => {
+      console.error('Global JavaScript error detected:', error)
+    }
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      console.error('Unhandled promise rejection:', event)
+    }
+    
+    window.addEventListener('error', handleError)
+    window.addEventListener('unhandledrejection', handleUnhandledRejection)
+    
+    return () => {
+      window.removeEventListener('error', handleError)
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection)
+    }
+  }, [])
   const [messages, setMessages] = useState<Message[]>([])
   const [inputText, setInputText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
@@ -188,6 +206,43 @@ const Chatbot: React.FC = () => {
         zIndex: 10000
       }}>
         Chatbot Loaded: {isOpen ? 'OPEN' : 'CLOSED'}
+      </div>
+      
+      {/* JavaScript test */}
+      <div style={{
+        position: 'fixed',
+        top: '50px',
+        left: '10px',
+        background: 'blue',
+        color: 'white',
+        padding: '10px',
+        fontSize: '14px',
+        zIndex: 10000,
+        cursor: 'pointer'
+      }}
+      onClick={() => {
+        alert('JavaScript is working! Button clicks are functional.')
+        console.log('Test button clicked successfully')
+      }}
+      >
+        CLICK TO TEST JS
+      </div>
+      
+      {/* Simple inline test */}
+      <div style={{
+        position: 'fixed',
+        top: '110px',
+        left: '10px',
+        background: 'green',
+        color: 'white',
+        padding: '10px',
+        fontSize: '14px',
+        zIndex: 10000,
+        cursor: 'pointer'
+      }}
+      onClick={() => window.location.href = 'mailto:test@example.com'}
+      >
+        TEST EMAIL LINK
       </div>
       
       {/* Alternative div-based button for testing */}
