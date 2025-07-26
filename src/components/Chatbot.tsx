@@ -7,21 +7,49 @@ const Chatbot: React.FC = () => {
   let isOpen = false
   let chatContainer: HTMLDivElement | null = null
   
+  // Professional scrolling utility - single, reliable method
+  const scrollToBottom = (container: HTMLElement, smooth: boolean = false) => {
+    if (!container) return
+    
+    container.style.scrollBehavior = smooth ? 'smooth' : 'auto'
+    
+    requestAnimationFrame(() => {
+      const scrollHeight = container.scrollHeight
+      const clientHeight = container.clientHeight
+      const maxScrollTop = scrollHeight - clientHeight
+      
+      if (maxScrollTop > 0) {
+        container.scrollTop = maxScrollTop
+      }
+    })
+  }
+  
+  // Reliable message appender with proper scrolling
+  const appendMessage = (container: HTMLElement, messageElement: HTMLElement, autoScroll: boolean = true) => {
+    container.appendChild(messageElement)
+    
+    if (autoScroll) {
+      scrollToBottom(container, false)  // Immediate feedback
+      setTimeout(() => scrollToBottom(container, true), 50)  // Smooth follow-up
+    }
+  }
+  
   const toggleChat = () => {
     console.log('🎯 Chat toggle clicked! Current state:', isOpen)
     isOpen = !isOpen
     
     if (chatContainer) {
-      chatContainer.style.display = isOpen ? 'block' : 'none'
+      chatContainer.style.display = isOpen ? 'flex' : 'none'
       
       // Auto-scroll to bottom when opening chat
       if (isOpen) {
-        setTimeout(() => {
+        // Use requestAnimationFrame to ensure chat is visible before scrolling
+        requestAnimationFrame(() => {
           const messages = document.getElementById('chat-messages')
           if (messages) {
-            messages.scrollTop = messages.scrollHeight
+            scrollToBottom(messages, false)
           }
-        }, 100)
+        })
       }
     }
     
@@ -32,7 +60,7 @@ const Chatbot: React.FC = () => {
       button.style.background = isOpen ? '#666' : 'linear-gradient(135deg, #d4af37, #e8c547)'
     }
   }
-  
+
   const sendMessage = async () => {
     const input = document.getElementById('chat-input') as HTMLInputElement
     const messages = document.getElementById('chat-messages')
@@ -44,22 +72,20 @@ const Chatbot: React.FC = () => {
     
     // Add user message
     const userMsg = document.createElement('div')
-    userMsg.style.cssText = 'background: #d4af37; color: white; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; align-self: flex-end; text-align: right; margin-left: auto;'
+    userMsg.className = 'chat-message user'
+    userMsg.style.cssText = 'background: #d4af37; color: white; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; align-self: flex-end; text-align: right; margin-left: auto; word-wrap: break-word;'
     userMsg.textContent = userMessage
-    messages.appendChild(userMsg)
     
-    // Immediate scroll after user message
-    messages.scrollTop = messages.scrollHeight
+    appendMessage(messages, userMsg)
     
     // Add typing indicator
     const typingMsg = document.createElement('div')
+    typingMsg.className = 'chat-message typing'
     typingMsg.style.cssText = 'background: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d4af37;'
     typingMsg.innerHTML = '🤖 <em>Thinking...</em>'
     typingMsg.id = 'typing-indicator'
-    messages.appendChild(typingMsg)
     
-    // Scroll to show typing indicator
-    messages.scrollTop = messages.scrollHeight
+    appendMessage(messages, typingMsg)
     
     try {
       // Get AI response
@@ -73,27 +99,11 @@ const Chatbot: React.FC = () => {
       
       // Add bot response
       const botMsg = document.createElement('div')
-      botMsg.style.cssText = 'background: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d4af37; animation: fadeIn 0.3s ease;'
+      botMsg.className = 'chat-message bot'
+      botMsg.style.cssText = 'background: #f0f0f0; color: #333; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d4af37; word-wrap: break-word; animation: fadeIn 0.3s ease;'
       botMsg.textContent = `🤖 ${botResponse}`
-      messages.appendChild(botMsg)
       
-      // Force scroll to bottom - multiple approaches for reliability
-      setTimeout(() => {
-        // Method 1: scrollTop
-        messages.scrollTop = messages.scrollHeight
-        
-        // Method 2: scrollIntoView on last message
-        const lastMessage = messages.lastElementChild
-        if (lastMessage) {
-          lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' })
-        }
-        
-        // Method 3: Smooth scroll as backup
-        messages.scrollTo({
-          top: messages.scrollHeight,
-          behavior: 'smooth'
-        })
-      }, 200)
+      appendMessage(messages, botMsg)
       
     } catch (error) {
       console.error('Error sending message:', error)
@@ -106,18 +116,11 @@ const Chatbot: React.FC = () => {
       
       // Show error message
       const errorMsg = document.createElement('div')
-      errorMsg.style.cssText = 'background: #ffe6e6; color: #d33; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d33;'
+      errorMsg.className = 'chat-message error'
+      errorMsg.style.cssText = 'background: #ffe6e6; color: #d33; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d33; word-wrap: break-word;'
       errorMsg.textContent = '🤖 Sorry, I\'m having trouble right now. Please try again or contact 1-800-NUTRIPAWS!'
-      messages.appendChild(errorMsg)
       
-      // Force scroll to show error message
-      setTimeout(() => {
-        messages.scrollTop = messages.scrollHeight
-        const lastMessage = messages.lastElementChild
-        if (lastMessage) {
-          lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' })
-        }
-      }, 100)
+      appendMessage(messages, errorMsg)
     }
   }
   
@@ -251,9 +254,15 @@ Provide helpful, accurate advice about pet nutrition, feeding, and our products.
             flex: 1,
             padding: '1rem',
             overflowY: 'auto',
+            overflowX: 'hidden',
             display: 'flex',
             flexDirection: 'column',
-            background: '#fafafa'
+            background: '#fafafa',
+            minHeight: 0, // Critical for flex scroll containers
+            scrollBehavior: 'smooth',
+            // Enhanced scrollbar styling
+            scrollbarWidth: 'thin',
+            scrollbarColor: '#d4af37 #f0f0f0'
           }}
         >
           <div style={{
