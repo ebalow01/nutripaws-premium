@@ -13,6 +13,16 @@ const Chatbot: React.FC = () => {
     
     if (chatContainer) {
       chatContainer.style.display = isOpen ? 'block' : 'none'
+      
+      // Auto-scroll to bottom when opening chat
+      if (isOpen) {
+        setTimeout(() => {
+          const messages = document.getElementById('chat-messages')
+          if (messages) {
+            messages.scrollTop = messages.scrollHeight
+          }
+        }, 100)
+      }
     }
     
     // Update button
@@ -37,6 +47,8 @@ const Chatbot: React.FC = () => {
     userMsg.style.cssText = 'background: #d4af37; color: white; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; align-self: flex-end; text-align: right; margin-left: auto;'
     userMsg.textContent = userMessage
     messages.appendChild(userMsg)
+    
+    // Immediate scroll after user message
     messages.scrollTop = messages.scrollHeight
     
     // Add typing indicator
@@ -45,6 +57,8 @@ const Chatbot: React.FC = () => {
     typingMsg.innerHTML = '🤖 <em>Thinking...</em>'
     typingMsg.id = 'typing-indicator'
     messages.appendChild(typingMsg)
+    
+    // Scroll to show typing indicator
     messages.scrollTop = messages.scrollHeight
     
     try {
@@ -63,13 +77,23 @@ const Chatbot: React.FC = () => {
       botMsg.textContent = `🤖 ${botResponse}`
       messages.appendChild(botMsg)
       
-      // Smooth scroll to bottom
+      // Force scroll to bottom - multiple approaches for reliability
       setTimeout(() => {
+        // Method 1: scrollTop
+        messages.scrollTop = messages.scrollHeight
+        
+        // Method 2: scrollIntoView on last message
+        const lastMessage = messages.lastElementChild
+        if (lastMessage) {
+          lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' })
+        }
+        
+        // Method 3: Smooth scroll as backup
         messages.scrollTo({
           top: messages.scrollHeight,
           behavior: 'smooth'
         })
-      }, 100)
+      }, 200)
       
     } catch (error) {
       console.error('Error sending message:', error)
@@ -85,7 +109,15 @@ const Chatbot: React.FC = () => {
       errorMsg.style.cssText = 'background: #ffe6e6; color: #d33; padding: 8px 12px; border-radius: 12px; margin: 8px 0; max-width: 80%; border-left: 3px solid #d33;'
       errorMsg.textContent = '🤖 Sorry, I\'m having trouble right now. Please try again or contact 1-800-NUTRIPAWS!'
       messages.appendChild(errorMsg)
-      messages.scrollTop = messages.scrollHeight
+      
+      // Force scroll to show error message
+      setTimeout(() => {
+        messages.scrollTop = messages.scrollHeight
+        const lastMessage = messages.lastElementChild
+        if (lastMessage) {
+          lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' })
+        }
+      }, 100)
     }
   }
   
